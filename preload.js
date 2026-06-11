@@ -1,11 +1,11 @@
+// a bridge between processes
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Экспортируем API для использования в процессе рендеринга
+// export API for using in rendering process
 contextBridge.exposeInMainWorld('electronAPI', {
-    // Пример функции для отправки сообщения в главный процесс
+    // function for sending message to the main process
     sendMessage: (message) => ipcRenderer.send('message', message),
 
-    // Пример функции для получения ответа от главного процесса
+    // function for getting message from main process
     onResponse: (callback) => ipcRenderer.on('response', callback)
 });
-
