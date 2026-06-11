@@ -1,0 +1,53 @@
+{
+  "name": "vibe-player",
+  "version": "1.0.0",
+  "description": "The music player",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build-win": "electron-builder --windows",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux"
+  },
+  "author": "amax3se",
+  "license": "MIT",
+  "repository": "https://github.com/amax3se/Vibe_Player.git",
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-builder": "^24.4.0"
+  },
+  "build": {
+    "appId": "com.amax3se.vibe-player",
+    "productName": "Vibe Player",
+    "publish": [{
+      "provider": "github",
+      "owner": "amax3se",
+      "repo": "Vibe_Player"
+    }],
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "src/assets/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "src/assets/icon.icns"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility",
+      "icon": "src/assets/icon.png"
+    }
+  }
+}
+
