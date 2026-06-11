@@ -49,3 +49,4 @@ lerna-debug.log*
 # Другое
 .DS_Store
 .vercel
+music/
