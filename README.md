@@ -1,6 +1,6 @@
 # Vibe player
-The music player with the function of matching music to your mood 
 ===
+The music player with the function of matching music to your mood 
 
 ## Features
 *Features will appear there*
