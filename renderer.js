@@ -1,17 +1,16 @@
-// Обработка событий пользовательского интерфейса
+// user interface events handling
 document.addEventListener('DOMContentLoaded', () => {
-const sendBtn = document.getElementById('send-btn');
-const responseDiv = document.getElementById('response');
+    const sendBtn = document.getElementById('send-btn');
+    const responseDiv = document.getElementById('response');
 
-// Обработчик клика по кнопке
-sendBtn.addEventListener('click', () => {
-// Отправляем сообщение в главный процесс через API, экспортированный в preload.js
-window.electronAPI.sendMessage('Привет из рендерера!');
-});
+    // button click handling
+    sendBtn.addEventListener('click', () => {
+        // send messages to the main process through API, exported to preload.js
+        window.electronAPI.sendMessage('Hi from renderer!');
+    });
 
-// Обработчик для получения ответа от главного процесса
-window.electronAPI.onResponse((event, response) => {
-responseDiv.textContent = response;
+    // handler for answer from main process getting  
+    window.electronAPI.onResponse((event, response) => {
+        responseDiv.textContent = response;
+    });
 });
-});
-
