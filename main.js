@@ -1,11 +1,31 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs').promises;
 
-// save global link to the window object
 let mainWindow;
+let musicArray = []; 
+
+// getting songs 
+async function loadMusicFiles() {
+    try {
+        const musicFolder = path.join(__dirname, 'src', 'assets', 'music');
+        const files = await fs.readdir(musicFolder);
+        musicArray = files.filter(file => {
+            const ext = path.extname(file).toLowerCase();
+            return ['.mp3', '.wav', '.flac', '.m4a'].includes(ext);
+        });
+
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('music-array', musicArray);
+        }
+
+    } catch (err) {
+        alert('Error in reading song folder: ', err);
+        musicArray = [];
+    }
+}
 
 function createWindow() {
-    // Create browser window
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 800,
@@ -13,18 +33,25 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: false,
             contextIsolation: true
-            }
         }
-    );
+    });
 
-    // Download HTML-file to the window
     mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 
-    // Window closing processing
+    // После полной загрузки окна отправляем список песен (если он уже загружен)
+    mainWindow.webContents.on('did-finish-load', () => {
+        if (musicArray.length > 0) {
+            mainWindow.webContents.send('music-array', musicArray);
+        }
+    });
+
     mainWindow.on('closed', () => {
         mainWindow = null;
     });
 }
+
+// Загружаем список песен параллельно, не дожидаясь окна
+loadMusicFiles();
 
 // Create window when app is ready
 app.on('ready', createWindow);
