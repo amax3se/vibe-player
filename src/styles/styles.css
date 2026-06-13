@@ -12,10 +12,30 @@ body {
     height: 60vh;
 }
 
+#previous-btn {
+    background-color: #014baa;
+    width: 10vh;
+    height: 10vh;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
 #play-btn {
     background-color: #014baa;
     width: 20vh;
     height: 20vh;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+#next-btn {
+    background-color: #014baa;
+    width: 10vh;
+    height: 10vh;
     color: white;
     border-radius: 50%;
     border: none;

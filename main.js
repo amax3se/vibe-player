@@ -50,7 +50,7 @@ function createWindow() {
     });
 }
 
-// Загружаем список песен параллельно, не дожидаясь окна
+// download songs array
 loadMusicFiles();
 
 // Create window when app is ready
