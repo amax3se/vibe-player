@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let audio = null;
     let playlist = []; 
-    let songNumber = 5;
+    let songNumber;
     const previousBtn = document.querySelector('#previous-btn');
     const playBtn = document.querySelector('#play-btn');
     const nextBtn = document.querySelector('#next-btn');
@@ -11,43 +11,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (songs.length === 0) { return; }
 
         playlist = songs;
-        songNumber = 5;
+        songNumber = 5; //there is 5 just because i have good song in the 5th position in my test folder
         if (songNumber >= playlist.length) songNumber = 0;
         audio = new Audio(`./assets/music/${playlist[songNumber]}`);
     });
     
+    function playSong(songIndex) {
+        if (audio) audio.pause(); 
+        if (songIndex < 0) songIndex = playlist.length;
+        if (songIndex >= playlist.length) songIndex = 0;
+
+        audio = new Audio(`./assets/music/${playlist[songIndex]}`);
+        songNumber = songIndex;
+
+        audio.play().catch(e => alert('Ошибка: ' + e.message));
+        playBtn.textContent = '⏸ ';
+    }
+
     previousBtn.addEventListener('click', () => {
-        audio.pause();
-
-        songNumber-=1;
-        audio = new Audio(`./assets/music/${playlist[songNumber]}`);
-
-        audio.play().catch(e => alert('Ошибка:', e));
+        songNumber -= 1;
+        playSong(songNumber);
     });
 
     playBtn.addEventListener('click', () => {
         if (!audio) return alert('Music was not downloaded');
 
         if (audio.paused) {
-            audio.play().catch(e => alert('Ошибка:', e));;
-            playBtn.textContent = 'Pause';
-            console.log('song is playing')
+            audio.play();
+            playBtn.textContent = '⏸   ';
         } else {
             audio.pause();
-            playBtn.textContent = 'Play';
-            console.log('song was stoped')
+            playBtn.textContent = '►';
         }
     });
 
     nextBtn.addEventListener('click', () => {
-        audio.pause();
-        playBtn.textContent = 'Play';
-
         songNumber += 1;
-        audio = null;
-        audio = new Audio(`./assets/music/${playlist[songNumber]}`);
-
-        audio.play().catch(e => alert('Ошибка:', e));
+        playSong(songNumber);
     });
 
     // handler for answer from main process getting  
