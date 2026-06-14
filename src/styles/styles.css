@@ -76,23 +76,42 @@ body {
     0 1px 3px rgba(0,0,0,.5);
 }
 
+
 #nowPlaying-btn {
-    background-color: #ddd; /* зеленый */
+    background-color: #ddd;
     width: 400px;
     height: 40px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     border: none;
     border-radius: 8px;
+    cursor: pointer;
     color: #999;
-    /* padding: 15px 100px; */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 20px;
     position: absolute;
     bottom: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.scrolling-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 40px; 
+  padding-left: 0;
+  transition: transform 2s linear;
+  will-change: transform;
+}
+
+/* unable button scrolling */
+#nowPlaying-btn.scrollable {
+  justify-content: flex-start;
+}
+
+#nowPlaying-btn.scrollable:hover .scrolling-text {
+  transform: translateX(var(--scroll-amount, 0px));
 }
 
 h1 {

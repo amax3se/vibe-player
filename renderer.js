@@ -1,4 +1,23 @@
 // user interface events handling
+let nowPlayingBtn, textSpan; 
+
+function updateScrollBehavior() {
+  const containerWidth = nowPlayingBtn.clientWidth;
+  const textWidth = textSpan.scrollWidth;
+  
+  const isOverflow = textWidth > containerWidth;
+  
+  if (isOverflow) {
+    const scrollAmount = -(textWidth - containerWidth);
+    nowPlayingBtn.style.setProperty('--scroll-amount', `${scrollAmount}px`);
+    nowPlayingBtn.classList.add('scrollable');
+  } else {
+    nowPlayingBtn.classList.remove('scrollable');
+    textSpan.style.transform = ''; 
+    nowPlayingBtn.style.removeProperty('--scroll-amount');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let audio = null;
     let playlist = []; 
@@ -6,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const previousBtn = document.querySelector('#previous-btn');
     const playBtn = document.querySelector('#play-btn');
     const nextBtn = document.querySelector('#next-btn');
-    const nowPlayingBtn = document.querySelector('#nowPlaying-btn');
+    nowPlayingBtn = document.querySelector('#nowPlaying-btn');
+    textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
     window.electronAPI.onMusicArray((songs) => {  //gets songs array
         if (songs.length === 0) { return; }
@@ -15,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         songNumber = 5; //there is 5 just because i have good song in the 5th position in my test folder
         if (songNumber >= playlist.length) songNumber = 0;
         audio = new Audio(`./assets/music/${playlist[songNumber]}`);
+        updateScrollBehavior(); 
     });
     
     function playSong(songIndex) {
@@ -26,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         songNumber = songIndex;
 
         audio.play().catch(e => alert('Ошибка: ' + e.message));
-        nowPlayingBtn.textContent = playlist[songIndex];
+        textSpan.textContent = playlist[songIndex];
+        updateScrollBehavior();
         playBtn.textContent = '⏸';
     }
 
@@ -40,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (audio.paused) {
             audio.play();
-            nowPlayingBtn.textContent = playlist[songNumber];
+            textSpan.textContent = playlist[songNumber];
+            updateScrollBehavior();
             playBtn.textContent = '⏸';
         } else {
             audio.pause();
