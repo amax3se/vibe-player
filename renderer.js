@@ -78,7 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     nowPlayingBtn.addEventListener('click', () => {
-        // must open new window with full array of songs
+        const childWindow = window.open('', 'modal')
+        childWindow.document.write('<h1>Hello</h1>')
     });
 
     // handler for answer from main process getting  

@@ -38,7 +38,6 @@ function createWindow() {
 
     mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 
-    // После полной загрузки окна отправляем список песен (если он уже загружен)
     mainWindow.webContents.on('did-finish-load', () => {
         if (musicArray.length > 0) {
             mainWindow.webContents.send('music-array', musicArray);
