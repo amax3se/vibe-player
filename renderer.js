@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScrollBehavior(); 
     });
     
+    //plays song
     function playSong(songIndex) {
         if (audio) audio.pause(); 
         if (songIndex < 0) songIndex = playlist.length-1;
@@ -74,6 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', () => {
         songNumber += 1;
         playSong(songNumber);
+    });
+
+    nowPlayingBtn.addEventListener('click', () => {
+        // must open new window with full array of songs
     });
 
     // handler for answer from main process getting  
