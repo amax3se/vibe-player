@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const previousBtn = document.querySelector('#previous-btn');
     const playBtn = document.querySelector('#play-btn');
     const nextBtn = document.querySelector('#next-btn');
+    const nowPlayingBtn = document.querySelector('#nowPlaying-btn');
 
     window.electronAPI.onMusicArray((songs) => {  //gets songs array
         if (songs.length === 0) { return; }
@@ -18,14 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function playSong(songIndex) {
         if (audio) audio.pause(); 
-        if (songIndex < 0) songIndex = playlist.length;
+        if (songIndex < 0) songIndex = playlist.length-1;
         if (songIndex >= playlist.length) songIndex = 0;
 
         audio = new Audio(`./assets/music/${playlist[songIndex]}`);
         songNumber = songIndex;
 
         audio.play().catch(e => alert('Ошибка: ' + e.message));
-        playBtn.textContent = '⏸ ';
+        nowPlayingBtn.textContent = playlist[songIndex];
+        playBtn.textContent = '⏸';
     }
 
     previousBtn.addEventListener('click', () => {
@@ -38,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (audio.paused) {
             audio.play();
-            playBtn.textContent = '⏸   ';
+            nowPlayingBtn.textContent = playlist[songNumber];
+            playBtn.textContent = '⏸';
         } else {
             audio.pause();
             playBtn.textContent = '►';
