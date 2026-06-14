@@ -1,12 +1,12 @@
 # Vibe player
-===
 The music player with the function of matching music to your mood 
 
 ## Features
-*Features will appear there*
+- Plays music
+- Shows what song is playing at the moment
 
 ## Technologies
-*Technologies will appear there*
+- Electron (includes JS, HTML, CSS)
 
 ## Requirements
 *Requirements will appear there*
