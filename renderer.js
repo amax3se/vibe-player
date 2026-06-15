@@ -22,11 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let audio = null;
     let playlist = []; 
     let songNumber;
+
     const previousBtn = document.querySelector('#previous-btn');
     const playBtn = document.querySelector('#play-btn');
     const nextBtn = document.querySelector('#next-btn');
+
     nowPlayingBtn = document.querySelector('#nowPlaying-btn');
     textSpan = nowPlayingBtn.querySelector('.scrolling-text');
+    const playlistPanel = document.querySelector('.playlist-panel');
+
 
     window.electronAPI.onMusicArray((songs) => {  //gets songs array
         if (songs.length === 0) { return; }
@@ -77,9 +81,25 @@ document.addEventListener('DOMContentLoaded', () => {
         playSong(songNumber);
     });
 
-    nowPlayingBtn.addEventListener('click', () => {
-        const childWindow = window.open('', 'modal')
-        childWindow.document.write('<h1>Hello</h1>')
+    // appearing array of songs
+    nowPlayingBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); 
+        playlistPanel.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!nowPlayingBtn.contains(event.target) && !playlistPanel.contains(event.target)) {
+            playlistPanel.classList.remove('show');
+        }
+    });
+
+    const listItems = document.querySelectorAll('.playlist-list li');
+    listItems.forEach((item, idx) => {
+    item.addEventListener('click', () => {
+        // playSong(idx);
+        console.log('Выбран трек:', item.textContent);
+        playlistPanel.classList.remove('show');
+    });
     });
 
     // handler for answer from main process getting  
