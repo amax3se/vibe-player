@@ -29,8 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     nowPlayingBtn = document.querySelector('#nowPlaying-btn');
     textSpan = nowPlayingBtn.querySelector('.scrolling-text');
-    const playlistPanel = document.querySelector('.playlist-panel');
-
 
     window.electronAPI.onMusicArray((songs) => {  //gets songs array
         if (songs.length === 0) { return; }
@@ -83,23 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // appearing array of songs
     nowPlayingBtn.addEventListener('click', (event) => {
-        event.stopPropagation(); 
-        playlistPanel.classList.toggle('show');
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!nowPlayingBtn.contains(event.target) && !playlistPanel.contains(event.target)) {
-            playlistPanel.classList.remove('show');
-        }
-    });
-
-    const listItems = document.querySelectorAll('.playlist-list li');
-    listItems.forEach((item, idx) => {
-    item.addEventListener('click', () => {
-        // playSong(idx);
-        console.log('Выбран трек:', item.textContent);
-        playlistPanel.classList.remove('show');
-    });
+        event.stopPropagation();
+        playlistWrapper.classList.toggle('show'); 
     });
 
     // handler for answer from main process getting  
