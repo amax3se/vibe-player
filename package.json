@@ -12,7 +12,7 @@
   },
   "author": "amax3se",
   "license": "MIT",
-  "repository": "https://github.com/amax3se/Vibe_Player.git",
+  "repository": "https://github.com/amax3se/vibe-player.git",
   "devDependencies": {
     "electron": "^25.0.0",
     "electron-builder": "^24.4.0"
@@ -23,7 +23,7 @@
     "publish": [{
       "provider": "github",
       "owner": "amax3se",
-      "repo": "Vibe_Player"
+      "repo": "vibe-player"
     }],
     "directories": {
       "output": "dist"
@@ -37,16 +37,16 @@
     ],
     "win": {
       "target": ["nsis"],
-      "icon": "src/assets/icon.ico"
+      "icon": "src/assets/icon/icon.ico"
     },
     "mac": {
       "target": ["dmg"],
-      "icon": "src/assets/icon.icns"
+      "icon": "src/assets/icon/icon.icns"
     },
     "linux": {
       "target": ["AppImage", "deb"],
       "category": "Utility",
-      "icon": "src/assets/icon.png"
+      "icon": "src/assets/icon/icon.png"
     }
   }
 }
