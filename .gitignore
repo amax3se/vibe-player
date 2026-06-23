@@ -50,3 +50,4 @@ lerna-debug.log*
 .DS_Store
 .vercel
 music/
+icon/
