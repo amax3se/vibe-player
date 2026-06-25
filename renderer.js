@@ -24,22 +24,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let songNumber;
 
     const previousBtn = document.querySelector('#previous-btn');
+    previousBtn.disabled = true;
     const playBtn = document.querySelector('#play-btn');
+    playBtn.disabled = true;
     const nextBtn = document.querySelector('#next-btn');
+    nextBtn.disabled = true;
 
     nowPlayingBtn = document.querySelector('#nowPlaying-btn');
+    nowPlayingBtn.style.pointerEvents = 'none';
     textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
-    window.electronAPI.onMusicArray((songs) => {  //gets songs array
-        if (songs.length === 0) { return; }
-
+    window.electronAPI.onMusicArray((songs) => {  //gets songs list
+        if (songs.length === 0) { 
+            alert('Playlist is empty :-(');
+            return; 
+        }
         playlist = songs;
+        
+        const parent = document.querySelector('.playlist-list');
+        parent.innerHTML = '';
+
+        // loop through the playlist and create a <p> for each song
+        for (let i = 0; i < playlist.length; i++) {
+            const songInList = document.createElement('p');
+            songInList.textContent = playlist[i];
+            parent.appendChild(songInList);
+        }
+        previousBtn.disabled = false;
+        playBtn.disabled = false;
+        nextBtn.disabled = false;
+        nowPlayingBtn.style.pointerEvents = 'auto';
+        
         songNumber = 5; //there is 5 just because i have good song in the 5th position in my test folder
         if (songNumber >= playlist.length) songNumber = 0;
+
         audio = new Audio(`./assets/music/${playlist[songNumber]}`);
+
         updateScrollBehavior(); 
     });
-    
+
     //plays song
     function playSong(songIndex) {
         if (audio) audio.pause(); 
@@ -79,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playSong(songNumber);
     });
 
-    // appearing array of songs
+    // appearing list of songs
     nowPlayingBtn.addEventListener('click', (event) => {
         event.stopPropagation();
         playlistWrapper.classList.toggle('show'); 
