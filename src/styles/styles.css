@@ -111,23 +111,23 @@ body {
 
 /* if the text does not fit it will scroll */ 
 .scrolling-text {
-  display: inline-block;
-  white-space: nowrap;
-  font-size: 20px;
-  line-height: 40px; 
-  padding-left: 0;
-  transition: transform 2s linear;
-  will-change: transform;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 20px;
+    line-height: 40px; 
+    padding-left: 0;
+    transition: transform 2s linear;
+    will-change: transform;
 }
 
 /* allows text in button scroll */ 
 #nowPlaying-btn.scrollable {
-  justify-content: flex-start;
+    justify-content: flex-start;
 }
 
 /* scrolls text if cursor is pointing on the button */
 #nowPlaying-btn.scrollable:hover .scrolling-text {
-  transform: translateX(var(--scroll-amount, 0px));
+    transform: translateX(var(--scroll-amount, 0px));
 }
 
 /* nowPlaying-btn and list */
@@ -172,7 +172,23 @@ body {
 /* if curosor point on nowPlaying-btn or list, then list appears */
 .playlist-button:hover 
 .playlist-list {
-  display: block;
+    display: block;
+}
+
+.addSong {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 20px 20px;
+}
+
+#addSong-btn {
+    background-color: #ddd;
+    width: 380px;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
 }
 
 h1 {
