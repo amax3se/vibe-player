@@ -139,6 +139,11 @@ body {
     z-index: 1;
 }
 
+.playlist-list button {
+    background-color: #f9f9f9;
+    color: black;
+}
+
 .playlist-button:hover 
 .playlist-list {
   display: block;
@@ -157,10 +162,6 @@ button {
     cursor: pointer;
     font-size: 14px;
     margin-top: 10px;
-}
-
-button:hover {
-    background-color: #3367d6;
 }
 
 #response {

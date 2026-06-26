@@ -43,10 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const parent = document.querySelector('.playlist-list');
         parent.innerHTML = '';
-
-        // loop through the playlist and create a <p> for each song
+        // loop through the playlist and create a <button> for each song
         for (let i = 0; i < playlist.length; i++) {
-            const songInList = document.createElement('p');
+            const songInList = document.createElement("button");
             songInList.textContent = playlist[i];
             parent.appendChild(songInList);
         }
