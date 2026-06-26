@@ -131,6 +131,8 @@ body {
     display: none;
     position: absolute;
     left: 50%; 
+    max-height: 375px;
+    overflow-y: auto; 
     transform: translateX(-50%);
     background-color: #f9f9f9;
     min-width: 372px;
@@ -140,8 +142,18 @@ body {
 }
 
 .playlist-list button {
+    display: inline-block;
+    text-align: left;
     background-color: #f9f9f9;
     color: black;
+    font-size: 15px;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: break-all;
+    max-width: 100%;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    width: 372px;
 }
 
 .playlist-button:hover 
