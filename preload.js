@@ -10,5 +10,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     sendMessage: (message) => ipcRenderer.send('message', message),
 
     // function for getting message from main process
-    onResponse: (callback) => ipcRenderer.on('response', callback)
+    onResponse: (callback) => ipcRenderer.on('response', callback),
+
+    saveAudioFile: (filePath) => ipcRenderer.send('save-audio-file', filePath),
+    onFileSaved: (callback) => ipcRenderer.on('file-saved', (event, result) => callback(result))
 });

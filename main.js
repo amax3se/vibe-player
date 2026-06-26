@@ -1,30 +1,37 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs').promises;
+const fs = require('fs'); 
 
 let mainWindow;
 let musicArray = []; 
 
+// path to the music folder
+const musicFolder = path.join(__dirname, 'assets', 'music');
+const assetsDir = path.join(__dirname, 'assets');
+
+if (!fs.existsSync(assetsDir)) {
+    fs.mkdirSync(assetsDir, { recursive: true });
+}
+if (!fs.existsSync(musicFolder)) {
+    fs.mkdirSync(musicFolder, { recursive: true });
+}
+
 // getting songs 
 async function loadMusicFiles() {
     try {
-        const musicFolder = path.join(__dirname, 'src', 'assets', 'music');
-        const files = await fs.readdir(musicFolder);
+        const files = await fs.promises.readdir(musicFolder);
         musicArray = files.filter(file => {
             const ext = path.extname(file).toLowerCase();
-            return ['.mp3', '.wav', '.flac', '.m4a'].includes(ext);
+            return ['.mp3', '.wav', '.flac', '.m4a', '.ogg', '.aac'].includes(ext);
         });
-
-        if (mainWindow && !mainWindow.isDestroyed()) {
-            mainWindow.webContents.send('music-array', musicArray);
-        }
-
     } catch (err) {
-        alert('Error in reading song folder: ', err);
+        console.error('Error reading music folder:', err);
         musicArray = [];
     }
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('music-array', musicArray);
+    }
 }
-
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1000,
@@ -71,7 +78,25 @@ app.on('activate', () => {
 
 // IPS-messages handler
 ipcMain.on('message', (event, message) => {
-    console.log('Получено сообщение:', message);
+    console.log('Get message:', message);
     // return answer to the renderer
-    mainWindow.webContents.send('response', `Ответ на: ${message}`);
+    mainWindow.webContents.send('response', `Answer on: ${message}`);
+});
+
+// save audio handler 
+ipcMain.on('save-audio-file', async (event, sourcePath) => {
+    try {
+        const fileName = path.basename(sourcePath);
+        const uniqueName = Date.now() + '_' + fileName;
+        const destPath = path.join(musicFolder, uniqueName);
+
+        await fs.promises.copyFile(sourcePath, destPath);
+        console.log('Файл сохранён:', destPath);
+
+        await loadMusicFiles();
+
+        event.reply('file-saved', { success: true, path: destPath });
+    } catch (err) {
+        event.reply('file-saved', { success: false, error: err.message });
+    }
 });

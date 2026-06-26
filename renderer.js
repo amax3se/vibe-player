@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     nowPlayingBtn.style.pointerEvents = 'none';
     textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
+    const fileInput = document.getElementById('file');
+    const addSongBtn = document.querySelector('#addSong-btn');
+
     window.electronAPI.onMusicArray((songs) => {  //gets songs list
         if (songs.length === 0) { 
             alert('Playlist is empty :-(');
@@ -116,6 +119,27 @@ document.addEventListener('DOMContentLoaded', () => {
     nowPlayingBtn.addEventListener('click', (event) => {
         event.stopPropagation();
         playlistWrapper.classList.toggle('show'); 
+    });
+
+    addSongBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        const filePath = e.target.files[0]?.path;
+        if (filePath) {
+            // Отправляем через preload
+            window.electronAPI.saveAudioFile(filePath);
+            // Очищаем input, чтобы можно было загрузить тот же файл повторно
+            fileInput.value = '';
+        }
+    });
+
+    // Обработчик ответа от main
+    window.electronAPI.onFileSaved((result) => {
+        if (result.success) {
+            alert('Файл успешно загружен!');
+        } else {
+            alert('Ошибка: ' + result.error);
+        }
     });
 
     // handler for answer from main process getting  
