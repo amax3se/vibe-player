@@ -5,6 +5,7 @@ body {
     background-color: #f7f7ff;
 }
 
+/* switching music buttons */
 .player {
     display: flex;
     justify-content: center;
@@ -13,6 +14,7 @@ body {
     height: 300px;
 }
 
+/* the button that switches the song back */ 
 #previous-btn {
     display: inline-block;
     font-size: 180%;
@@ -34,6 +36,7 @@ body {
     0 1px 3px rgba(0,0,0,.5);
 }
 
+/* the button that plays or pauses the song */
 #play-btn {
     display: inline-block;
     font-size: 180%;
@@ -55,6 +58,7 @@ body {
     0 1px 3px rgba(0,0,0,.5);
 }
 
+/* the button that switches the song forward */ 
 #next-btn {
     display: inline-block;
     font-size: 180%;
@@ -76,12 +80,14 @@ body {
     0 1px 3px rgba(0,0,0,.5);
 }
 
+/* song list */ 
 .playlist {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* the button that showes what song is playing */ 
 #nowPlaying-btn {
     background-color: #ddd;
     left: 50%; 
@@ -103,6 +109,7 @@ body {
     z-index: 10;
 }
 
+/* if the text does not fit it will scroll */ 
 .scrolling-text {
   display: inline-block;
   white-space: nowrap;
@@ -113,20 +120,24 @@ body {
   will-change: transform;
 }
 
+/* allows text in button scroll */ 
 #nowPlaying-btn.scrollable {
   justify-content: flex-start;
 }
 
+/* scrolls text if cursor is pointing on the button */
 #nowPlaying-btn.scrollable:hover .scrolling-text {
   transform: translateX(var(--scroll-amount, 0px));
 }
 
+/* nowPlaying-btn and list */
 .playlist-button {
     position: relative;
     bottom: 0;
     display: inline-block;
 }
 
+/* so, the list of songs */
 .playlist-list {
     display: none;
     position: absolute;
@@ -141,6 +152,8 @@ body {
     z-index: 1;
 }
 
+/* each song in the list is button, because I need to indicate clicks */
+/* all songs in the list */
 .playlist-list button {
     display: inline-block;
     text-align: left;
@@ -156,6 +169,7 @@ body {
     width: 372px;
 }
 
+/* if curosor point on nowPlaying-btn or list, then list appears */
 .playlist-button:hover 
 .playlist-list {
   display: block;
