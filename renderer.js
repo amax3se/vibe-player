@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let songNumber;
 
     const previousBtn = document.querySelector('#previous-btn');
-    previousBtn.disabled = true;
+    previousBtn.disabled = true; // does not allow to click on button if playlist wasn't created
     const playBtn = document.querySelector('#play-btn');
     playBtn.disabled = true;
     const nextBtn = document.querySelector('#next-btn');
@@ -43,12 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const parent = document.querySelector('.playlist-list');
         parent.innerHTML = '';
+
         // loop through the playlist and create a <button> for each song
         for (let i = 0; i < playlist.length; i++) {
             const songInList = document.createElement("button");
             songInList.textContent = playlist[i];
             parent.appendChild(songInList);
         }
+        
+        // plays song whose name was clicked
+        const buttons = document.querySelectorAll('.playlist-list button');
+        buttons.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                playSong(index);
+            });
+        });
+
+        // allows to click on button if playlist was created
         previousBtn.disabled = false;
         playBtn.disabled = false;
         nextBtn.disabled = false;
