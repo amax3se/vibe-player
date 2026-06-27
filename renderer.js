@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fileInput = document.getElementById('file');
     const addSongBtn = document.querySelector('#addSong-btn');
+    const playlistWrapper = document.querySelector('.playlist-list');
 
     window.electronAPI.onMusicArray((songs) => {  //gets songs list
         if (songs.length === 0) { 
@@ -121,26 +122,19 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistWrapper.classList.toggle('show'); 
     });
 
-    addSongBtn.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', (e) => {
-        const filePath = e.target.files[0]?.path;
-        if (filePath) {
-            // Отправляем через preload
-            window.electronAPI.saveAudioFile(filePath);
-            // Очищаем input, чтобы можно было загрузить тот же файл повторно
-            fileInput.value = '';
-        }
+    // save new song
+    addSongBtn.addEventListener('click', () => {
+        window.electronAPI.openFileDialog();
     });
 
-    // Обработчик ответа от main
     window.electronAPI.onFileSaved((result) => {
         if (result.success) {
-            alert('Файл успешно загружен!');
+            alert('File was saved!');
         } else {
-            alert('Ошибка: ' + result.error);
+            alert('Error: ' + result.error);
         }
     });
+
 
     // handler for answer from main process getting  
     window.electronAPI.onResponse((event, response) => {

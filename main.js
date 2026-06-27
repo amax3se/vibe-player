@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs'); 
 
@@ -6,8 +6,8 @@ let mainWindow;
 let musicArray = []; 
 
 // path to the music folder
-const musicFolder = path.join(__dirname, 'assets', 'music');
-const assetsDir = path.join(__dirname, 'assets');
+const musicFolder = path.join(__dirname, 'src', 'assets', 'music');
+const assetsDir = path.join(__dirname, 'src', 'assets');
 
 if (!fs.existsSync(assetsDir)) {
     fs.mkdirSync(assetsDir, { recursive: true });
@@ -46,9 +46,7 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 
     mainWindow.webContents.on('did-finish-load', () => {
-        if (musicArray.length > 0) {
-            mainWindow.webContents.send('music-array', musicArray);
-        }
+        mainWindow.webContents.send('music-array', musicArray);
     });
 
     mainWindow.on('closed', () => {
@@ -84,19 +82,31 @@ ipcMain.on('message', (event, message) => {
 });
 
 // save audio handler 
-ipcMain.on('save-audio-file', async (event, sourcePath) => {
+ipcMain.on('open-file-dialog', async (event) => {
     try {
-        const fileName = path.basename(sourcePath);
-        const uniqueName = Date.now() + '_' + fileName;
-        const destPath = path.join(musicFolder, uniqueName);
-
-        await fs.promises.copyFile(sourcePath, destPath);
-        console.log('Файл сохранён:', destPath);
-
-        await loadMusicFiles();
-
-        event.reply('file-saved', { success: true, path: destPath });
+        const result = await dialog.showOpenDialog(mainWindow, {
+            properties: ['openFile'],
+            filters: [
+                { name: 'Audio', extensions: ['mp3', 'wav', 'flac', 'm4a', 'ogg', 'aac'] }
+            ]
+        });
+        if (!result.canceled && result.filePaths.length > 0) {
+            const sourcePath = result.filePaths[0];
+            const fileName = path.basename(sourcePath);
+            const uniqueName = Date.now() + '_' + fileName;
+            const destPath = path.join(musicFolder, uniqueName);
+            
+            await fs.promises.copyFile(sourcePath, destPath);
+            console.log('File saved:', destPath);
+            
+            await loadMusicFiles();
+            
+            event.reply('file-saved', { success: true, path: destPath });
+        } else {
+            event.reply('file-saved', { success: false, error: 'User cancel the choice' });
+        }
     } catch (err) {
+        console.error('Error:', err);
         event.reply('file-saved', { success: false, error: err.message });
     }
 });
