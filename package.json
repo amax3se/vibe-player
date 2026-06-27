@@ -45,7 +45,8 @@
     },
     "linux": {
       "target": ["AppImage", "deb"],
-      "category": "Utility"
+      "category": "Utility",
+      "maintainer": "amax3se <ваш-email@example.com>"
     }
   }
 }
