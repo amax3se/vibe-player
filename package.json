@@ -20,11 +20,13 @@
   "build": {
     "appId": "com.amax3se.vibe-player",
     "productName": "Vibe Player",
-    "publish": [{
-      "provider": "github",
-      "owner": "amax3se",
-      "repo": "vibe-player"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "amax3se",
+        "repo": "vibe-player"
+      }
+    ],
     "directories": {
       "output": "dist"
     },
@@ -36,17 +38,14 @@
       "package.json"
     ],
     "win": {
-      "target": ["nsis"],
-      "icon": "src/assets/icon/icon.ico"
+      "target": ["nsis"]
     },
     "mac": {
-      "target": ["dmg"],
-      "icon": "src/assets/icon/icon.icns"
+      "target": ["dmg"]
     },
     "linux": {
       "target": ["AppImage", "deb"],
-      "category": "Utility",
-      "icon": "src/assets/icon/icon.png"
+      "category": "Utility"
     }
   }
 }

@@ -51,3 +51,4 @@ lerna-debug.log*
 .vercel
 music/
 icon/
+build/
