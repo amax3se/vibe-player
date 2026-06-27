@@ -85,11 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         audio = new Audio(`./assets/music/${playlist[songIndex]}`);
         songNumber = songIndex;
-
+        
+        audio.addEventListener('ended', onSongEnd);
+        
         audio.play().catch(e => alert('Ошибка: ' + e.message));
         textSpan.textContent = playlist[songIndex];
         updateScrollBehavior();
         playBtn.textContent = '⏸';
+    }
+
+    function onSongEnd() {
+        songNumber += 1;
+        if (songNumber >= playlist.length) songNumber = 0;
+        playSong(songNumber);
     }
 
     previousBtn.addEventListener('click', () => {
