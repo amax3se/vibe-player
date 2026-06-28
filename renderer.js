@@ -44,17 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return; 
         }
         playlist = songs;
-        
+
         const parent = document.querySelector('.playlist-list');
         parent.innerHTML = '';
 
         // loop through the playlist and create a <button> for each song
         for (let i = 0; i < playlist.length; i++) {
             const songInList = document.createElement("button");
-            songInList.textContent = playlist[i];
+            songInList.textContent = playlist[i].name;
             parent.appendChild(songInList);
         }
-        
+
         // plays song whose name was clicked
         const buttons = document.querySelectorAll('.playlist-list button');
         buttons.forEach((btn, index) => {
@@ -69,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
         nextBtn.disabled = false;
         nowPlayingBtn.style.pointerEvents = 'auto';
         
-        songNumber = 5; //there is 5 just because i have good song in the 5th position in my test folder
+        songNumber = 0; //there is 5 just because i have good song in the 5th position in my test folder
         if (songNumber >= playlist.length) songNumber = 0;
 
-        audio = new Audio(`./assets/music/${playlist[songNumber]}`);
+        audio = new Audio(playlist[songNumber].path);
 
         updateScrollBehavior(); 
     });
@@ -83,13 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (songIndex < 0) songIndex = playlist.length-1;
         if (songIndex >= playlist.length) songIndex = 0;
 
-        audio = new Audio(`./assets/music/${playlist[songIndex]}`);
+        audio = new Audio(playlist[songIndex].path);
         songNumber = songIndex;
         
         audio.addEventListener('ended', onSongEnd);
         
         audio.play().catch(e => alert('Ошибка: ' + e.message));
-        textSpan.textContent = playlist[songIndex];
+        textSpan.textContent = playlist[songIndex].name;
         updateScrollBehavior();
         playBtn.textContent = '⏸';
     }
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (audio.paused) {
             audio.play();
-            textSpan.textContent = playlist[songNumber];
+            textSpan.textContent = playlist[songNumber].name;
             updateScrollBehavior();
             playBtn.textContent = '⏸';
         } else {

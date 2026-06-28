@@ -6,12 +6,8 @@ let mainWindow;
 let musicArray = []; 
 
 // path to the music folder
-const musicFolder = path.join(__dirname, 'src', 'assets', 'music');
-const assetsDir = path.join(__dirname, 'src', 'assets');
+const musicFolder = path.join(app.getPath('userData'), 'music');
 
-if (!fs.existsSync(assetsDir)) {
-    fs.mkdirSync(assetsDir, { recursive: true });
-}
 if (!fs.existsSync(musicFolder)) {
     fs.mkdirSync(musicFolder, { recursive: true });
 }
@@ -20,10 +16,12 @@ if (!fs.existsSync(musicFolder)) {
 async function loadMusicFiles() {
     try {
         const files = await fs.promises.readdir(musicFolder);
-        musicArray = files.filter(file => {
-            const ext = path.extname(file).toLowerCase();
-            return ['.mp3', '.wav', '.flac', '.m4a', '.ogg', '.aac'].includes(ext);
-        });
+        musicArray = files
+            .filter(file => /\.(mp3|wav|flac|m4a|ogg|aac)$/i.test(file))
+            .map(file => ({
+                name: file,
+                path: path.join(musicFolder, file)
+            }));
     } catch (err) {
         console.error('Error reading music folder:', err);
         musicArray = [];
