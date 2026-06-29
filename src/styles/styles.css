@@ -24,7 +24,7 @@ body {
     vertical-align: middle;
     text-align: center;
     letter-spacing: -.1em; 
-    font-size: 30px;
+    font-size: 5vh;
     text-decoration: none;
     text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
     color: #999;
@@ -45,8 +45,7 @@ body {
     line-height: 1.7em;
     vertical-align: middle;
     text-align: center;
-    /* letter-spacing: -.2em;  */
-    font-size: 80px;
+    font-size: 9vh;
     text-decoration: none;
     text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
     color: #999;
@@ -68,7 +67,7 @@ body {
     vertical-align: middle;
     text-align: center;
     letter-spacing: -.1em;
-    font-size: 30px;
+    font-size: 5vh;
     text-decoration: none;
     text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
     color: #999;
@@ -180,6 +179,32 @@ body {
     bottom: 0;
     right: 0;
     padding: 20px 20px;
+}
+
+.changeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 9vh;
+}
+
+#spedUp-btn {
+    background-color: #ddd;
+    width: 50px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+#slowDown-btn {
+    background-color: #ddd;
+    width: 50px;
+    height: 40px;
+    font-size: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    color: #999;
 }
 
 #addSong-btn {
