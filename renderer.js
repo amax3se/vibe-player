@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     nowPlayingBtn.style.pointerEvents = 'none';
     textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
+    const spedUpBtn = document.querySelector('#spedUp-btn');
+    const slowDownBtn = document.querySelector('#slowDown-btn');
+
     const fileInput = document.getElementById('file');
     const addSongBtn = document.querySelector('#addSong-btn');
     const playlistWrapper = document.querySelector('.playlist-list');
@@ -128,6 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
     nowPlayingBtn.addEventListener('click', (event) => {
         event.stopPropagation();
         playlistWrapper.classList.toggle('show'); 
+    });
+
+    // sped up and slow down buttons
+    spedUpBtn.addEventListener('click', () => {
+        audio.playbackRate = 1.5;
+    });
+    slowDownBtn.addEventListener('click', () => {
+        audio.playbackRate = 0.7;
     });
 
     // save new song
