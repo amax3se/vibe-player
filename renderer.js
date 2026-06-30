@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const spedUpBtn = document.querySelector('#spedUp-btn');
     const slowDownBtn = document.querySelector('#slowDown-btn');
+    let speed = 1;
 
     const fileInput = document.getElementById('file');
     const addSongBtn = document.querySelector('#addSong-btn');
@@ -135,10 +136,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // sped up and slow down buttons
     spedUpBtn.addEventListener('click', () => {
-        audio.playbackRate = 1.5;
+        if (speed + 0.5 >= 3) { 
+            alert('Too fast!'); 
+        } else { 
+            audio.playbackRate += 0.5;
+            speed += 0.5; 
+        }
     });
     slowDownBtn.addEventListener('click', () => {
-        audio.playbackRate = 0.7;
+        if (speed - 0.5 <= 0) { 
+            alert('Too slow!'); 
+        } else { 
+            audio.playbackRate -= 0.5;
+            speed -= 0.5; 
+        }
     });
 
     // save new song
