@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let audio = null;
     let playlist = []; 
     let songNumber;
+    const responseDiv = document.querySelector('#response-div');
 
     // the main buttons (next, previous, play, stop)
     const previousBtn = document.querySelector('#previous-btn');
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const spedUpBtn = document.querySelector('#spedUp-btn');
     const slowDownBtn = document.querySelector('#slowDown-btn');
     let speed = 1;
+    const deleteBtn = document.querySelector('#delete-btn');
 
     // button for adding songs
     const fileInput = document.getElementById('file');
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.addEventListener('ended', onSongEnd); // if end -> play next song
         
         // plays song
-        audio.play().catch(e => alert('Ошибка: ' + e.message));
+        audio.play();
         textSpan.textContent = playlist[songIndex].name;
         updateScrollBehavior();
         playBtn.textContent = '⏸';
@@ -71,8 +73,58 @@ document.addEventListener('DOMContentLoaded', () => {
     // checks if it is the song end and if true plays new song
     function onSongEnd() {
         songNumber += 1;
-        if (songNumber >= playlist.length) songNumber = 0;
         playSong(songNumber);
+    }
+
+    // renders playlist
+    function renderPlaylist(songs) {
+        playlist = songs || [];
+        const parent = document.querySelector('.playlist-list');
+        parent.innerHTML = '';
+
+        if (playlist.length === 0) {
+            previousBtn.disabled = true;
+            playBtn.disabled = true;
+            nextBtn.disabled = true;
+            nowPlayingBtn.style.pointerEvents = 'none';
+            textSpan.textContent = 'Now playing...'; 
+            playBtn.textContent = '►';
+            audio = null;
+            songNumber = 0;
+            nowPlayingBtn.classList.remove('scrollable');
+            textSpan.style.transform = '';
+            nowPlayingBtn.style.removeProperty('--scroll-amount');
+            return;
+        }
+
+        playlist.forEach((song, index) => {
+            const btn = document.createElement('button');
+            btn.textContent = song.name;
+            btn.addEventListener('click', () => playSong(index));
+            parent.appendChild(btn);
+        });
+
+        previousBtn.disabled = false;
+        playBtn.disabled = false;
+        nextBtn.disabled = false;
+        nowPlayingBtn.style.pointerEvents = 'auto';
+
+        if (!audio) {
+            songNumber = 0;
+            audio = new Audio(playlist[0].path);
+            textSpan.textContent = playlist[0].name;
+            updateScrollBehavior();
+        }
+    }
+
+    // delete song 
+    async function deleteTrack(filePath) {
+        try {
+            const result = await window.electronAPI.deleteFile(filePath);
+            return result.updatedPlaylist; 
+        } catch (error) {
+            return null;
+        }
     }
     
     // === BUTTON's HANDLERS ===
@@ -84,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // plays song 
     playBtn.addEventListener('click', () => {
-        if (!audio) return alert('Music was not downloaded');
+        if (!audio) return alert('Firstly choose music!');
 
         if (audio.paused) {
             audio.play();
@@ -111,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // sped up and slow down song
     spedUpBtn.addEventListener('click', () => {
+        if (!audio) return alert('Firstly choose music!');
         if (speed + 0.5 >= 3) { 
             alert('Too fast!'); 
         } else { 
@@ -119,11 +172,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     slowDownBtn.addEventListener('click', () => {
+        if (!audio) return alert('Firstly choose music!');
         if (speed - 0.5 <= 0) { 
             alert('Too slow!'); 
         } else { 
             audio.playbackRate -= 0.5;
             speed -= 0.5; 
+        }
+    });
+    // delete song button
+    deleteBtn.addEventListener('click', async () => {
+        if (!playlist.length) {
+            return alert('Playlist is empty!');
+        }
+
+        audio.pause();
+
+        const newPlaylist = await deleteTrack(playlist[songNumber].path);
+        if (newPlaylist === null) {
+            return alert('Error with deleting');
+        }
+
+        renderPlaylist(newPlaylist);
+
+        if (!playlist.length) {
+            alert('Playlist is empty!');
+        } else {
+            if (songNumber >= playlist.length) songNumber = 0;
+            playSong(songNumber);
         }
     });
 
@@ -134,43 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === HANDLERS (main -> preload -> renderer) ===
     //gets songs list
-    window.electronAPI.onMusicArray((songs) => { 
-        if (songs.length === 0) { 
-            alert('Playlist is empty :-(');
-            return; 
-        }
-        playlist = songs;
-
-        const parent = document.querySelector('.playlist-list');
-        parent.innerHTML = '';
-
-        // loop through the playlist and create a <button> for each song
-        for (let i = 0; i < playlist.length; i++) {
-            const songInList = document.createElement("button");
-            songInList.textContent = playlist[i].name;
-            parent.appendChild(songInList);
-        }
-
-        // plays song whose name was clicked
-        const buttons = document.querySelectorAll('.playlist-list button');
-        buttons.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                playSong(index);
-            });
-        });
-
-        // allows to click on button if playlist was created
-        previousBtn.disabled = false;
-        playBtn.disabled = false;
-        nextBtn.disabled = false;
-        nowPlayingBtn.style.pointerEvents = 'auto';
-        
-        songNumber = 0; 
-        if (songNumber >= playlist.length) songNumber = 0;
-
-        audio = new Audio(playlist[songNumber].path);
-
-        updateScrollBehavior(); 
+    window.electronAPI.onMusicArray((songs) => {
+        renderPlaylist(songs);
     });
 
     // file saving correction handler
@@ -178,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (result.success) {
             alert('File was saved!');
         } else {
-            alert('Error: ' + result.error);
+            alert('Error saving file');
         }
     });
 

@@ -108,3 +108,34 @@ ipcMain.on('open-file-dialog', async (event) => {
         event.reply('file-saved', { success: false, error: err.message });
     }
 });
+
+ipcMain.handle('delete-file', async (event, filePath) => {
+    if (!filePath || typeof filePath !== 'string') {
+        throw new Error('Wrong path to file');
+    }
+
+    const resolvedPath = path.resolve(filePath);
+    const normalizedFolder = path.resolve(musicFolder);
+    if (!resolvedPath.startsWith(normalizedFolder)) {
+        throw new Error('Deleting files outside music folder is forbidden');
+    }
+
+    try {
+        await fs.promises.access(resolvedPath, fs.constants.F_OK);
+    } catch {
+        throw new Error('File not found');
+    }
+
+    try {
+        await fs.promises.unlink(resolvedPath);
+        await loadMusicFiles();
+        return { 
+            success: true, 
+            message: 'File was succesfully deleted',
+            updatedPlaylist: musicArray 
+        };
+    } catch (error) {
+        console.error('Deleting error:', error);
+        throw new Error('Could not delete file');
+    }
+});

@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // function for sending songs array to the renderer
     onMusicArray: (callback) => ipcRenderer.on('music-array', (event, data) => callback(data)),
 
+    deleteFile: (filePath) => ipcRenderer.invoke('delete-file', filePath),
+
     openFileDialog: () => ipcRenderer.send('open-file-dialog'),
     onFileSaved: (callback) => ipcRenderer.on('file-saved', (event, result) => callback(result))
 });
