@@ -2,8 +2,10 @@
 The music player with the function of matching music to your mood 
 
 ## Features
-- Plays music
-- Shows what song is playing at the moment
+- Listen to your music
+- Upload your own music
+- Delete music
+- Speed up and slow down music
 
 ## Technologies
 - Electron (includes JS, HTML, CSS)
