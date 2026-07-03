@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     nowPlayingBtn.style.pointerEvents = 'none';
     const textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
-    // buttons to control song (speed, removal)
+    // buttons to control song (speed, removal, repeating)
+    const repeatBtn = document.querySelector('#repeat-btn');
     const spedUpBtn = document.querySelector('#spedUp-btn');
     const slowDownBtn = document.querySelector('#slowDown-btn');
     let speed = 1;
@@ -161,6 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistWrapper.classList.toggle('show'); 
     });
 
+    // repeat song
+    repeatBtn.addEventListener('click', () => {
+        playSong(songNumber);
+    });
     // sped up and slow down song
     spedUpBtn.addEventListener('click', () => {
         if (!audio) return alert('Firstly choose music!');

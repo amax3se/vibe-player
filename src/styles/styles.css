@@ -182,12 +182,23 @@ body {
   height: 9vh;
 }
 
+/* the button that repeats song */
+#repeat-btn {
+    background-color: #ddd;
+    width: 50px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
 /* the button that speeds up song */
 #spedUp-btn {
     background-color: #ddd;
     width: 50px;
     height: 40px;
     font-size: 20px;
+    margin-left: 10px;
     cursor: pointer;
     color: #999;
 }
