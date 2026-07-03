@@ -164,20 +164,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // sped up and slow down song
     spedUpBtn.addEventListener('click', () => {
         if (!audio) return alert('Firstly choose music!');
-        if (speed + 0.5 >= 3) { 
+        if (speed + 0.2 >= 3) { 
             alert('Too fast!'); 
         } else { 
-            audio.playbackRate += 0.5;
-            speed += 0.5; 
+            audio.playbackRate += 0.2;
+            speed += 0.2; 
         }
     });
     slowDownBtn.addEventListener('click', () => {
         if (!audio) return alert('Firstly choose music!');
-        if (speed - 0.5 <= 0) { 
+        if (speed - 0.2 <= 0) { 
             alert('Too slow!'); 
         } else { 
-            audio.playbackRate -= 0.5;
-            speed -= 0.5; 
+            audio.playbackRate -= 0.2;
+            speed -= 0.2; 
         }
     });
     // delete song button
