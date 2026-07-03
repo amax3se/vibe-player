@@ -8,9 +8,6 @@ The music player with the function of matching music to your mood
 ## Technologies
 - Electron (includes JS, HTML, CSS)
 
-## Requirements
-*Requirements will appear there*
-
 ## Installation
 1) Go to the latest release
 2) Click on the last version
