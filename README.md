@@ -12,7 +12,7 @@ The music player with the function of matching music to your mood
 *Requirements will appear there*
 
 ## Installation
-1) Go to releases
+1) Go to the latest release
 2) Click on the last version
 3) Download the installer file for your OS (Windows -> .exe, Linux -> .deb, MacOS -> .dmg)
 3) Open installer
