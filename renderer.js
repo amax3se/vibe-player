@@ -1,6 +1,6 @@
 // user interface events handling
 document.addEventListener('DOMContentLoaded', () => {
-    // === DECLARING ===
+// === DECLARING ===
     // main variables that will be used during all work
     let audio = null;
     let playlist = []; 
@@ -27,12 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let speed = 1;
     const deleteBtn = document.querySelector('#delete-btn');
 
+    // button to find song that suit your mood
+    const findSongBtn = document.querySelector('#findSong-btn');
+
     // button for adding songs
     const fileInput = document.getElementById('file');
     const addSongBtn = document.querySelector('#addSong-btn');
     const playlistWrapper = document.querySelector('.playlist-list');
 
-    // === FUNCTIONS ===
+// === FUNCTIONS ===
     // updates scrolling if text is bigger than button
     function updateScrollBehavior() {
         const containerWidth = nowPlayingBtn.clientWidth;
@@ -128,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // === BUTTON's HANDLERS ===
+// === BUTTON's HANDLERS ===
     // plays previous song 
     previousBtn.addEventListener('click', () => {
         songNumber -= 1;
@@ -208,12 +211,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // find song
+    findSongBtn.addEventListener('click', () => {
+        alert('Button is not available now!')
+    });
+
     // save new song
     addSongBtn.addEventListener('click', () => {
         window.electronAPI.openFileDialog();
     });
 
-    // === HANDLERS (main -> preload -> renderer) ===
+// === HANDLERS (main -> preload -> renderer) ===
     //gets songs list
     window.electronAPI.onMusicArray((songs) => {
         renderPlaylist(songs);
