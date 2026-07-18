@@ -1,4 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const Essentia = require('essentia.js');
+const essentia = new Essentia();
 const path = require('path');
 const fs = require('fs'); 
 
@@ -12,16 +14,44 @@ if (!fs.existsSync(musicFolder)) {
     fs.mkdirSync(musicFolder, { recursive: true });
 }
 
+// tagging song
+async function tagSong(filePath) {
+    const file = fs.readFileSync(filePath);
+    const model = await essentia.getModel('discogs-effnet');
+
+    try {
+        const arrayBuffer = file.buffer.slice(
+            file.byteOffset, 
+            file.byteOffset + file.byteLength
+        );
+
+        let audioData = await essentia.decodeAudioData(arrayBuffer);
+
+        console.log(`Length: ${audioData.audioData.length / audioData.sampleRate} sec`);
+        console.log(`Rate: ${audioData.sampleRate} Hz`);
+    } catch (error) {
+        console.error('Error with analyzing:', error);
+        throw error;
+    }
+
+    const tags = model.compute(audioData);
+    console.log(tags);
+} //! сохранять теги в файл
+
 // getting songs 
 async function loadMusicFiles() {
     try {
         const files = await fs.promises.readdir(musicFolder);
-        musicArray = files
-            .filter(file => /\.(mp3|wav|flac|m4a|ogg|aac)$/i.test(file))
-            .map(file => ({
+
+        musicArray = [];
+        for (const file of filteredFiles) {
+            const filePath = path.join(musicFolder, file);
+            await tagSong(filePath);
+            musicArray.push({
                 name: file,
-                path: path.join(musicFolder, file)
-            }));
+                path: filePath
+            });
+        }
     } catch (err) {
         console.error('Error reading music folder:', err);
         musicArray = [];
