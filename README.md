@@ -14,10 +14,13 @@ The music player with the function of matching music to your mood
 1) Go to the latest release
 2) Click on the last version
 3) Download the installer file for your OS (Windows -> .exe, Linux -> .deb, MacOS -> .dmg)
-3) Open installer
+3) Open installer and follow the instructions
 
-## Usage
-*Usage tutorial will appear there*
+## Usage 🚀
+1) Open application
+2) Click on the "Add song" button and choose track you want listen
+3) Rush on the "Play" button
+4) Cogratulations 🎉
 
 ## License
 MIT
