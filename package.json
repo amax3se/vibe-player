@@ -14,8 +14,8 @@
   "license": "MIT",
   "repository": "https://github.com/amax3se/vibe-player.git",
   "devDependencies": {
-    "electron": "^25.0.0",
-    "electron-builder": "^24.4.0"
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3"
   },
   "build": {
     "appId": "com.amax3se.vibe-player",
@@ -38,16 +38,22 @@
       "package.json"
     ],
     "win": {
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "mac": {
-      "target": ["dmg"]
+      "target": [
+        "dmg"
+      ]
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        "AppImage",
+        "deb"
+      ],
       "category": "Utility",
-      "maintainer": "amax3se amaxese@gmail.com>"
+      "maintainer": "amax3se <amaxese@gmail.com>"
     }
   }
 }
-
