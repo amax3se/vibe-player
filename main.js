@@ -2,7 +2,10 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const { Essentia, EssentiaWASM } = require('essentia.js');
 const path = require('path');
 const fs = require('fs'); 
-const decode = require('audio-decode');
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('ffmpeg-static');
+const wav = require('wav');
+const { Readable } = require('stream');
 
 const essentia = new Essentia(EssentiaWASM);
 let mainWindow;
@@ -14,77 +17,98 @@ if (!fs.existsSync(musicFolder)) {
     fs.mkdirSync(musicFolder, { recursive: true });
 }
 
+// decode to vector
+ffmpeg.setFfmpegPath(ffmpegPath);
+function decodeAudio(filePath) {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        ffmpeg(filePath)
+            .toFormat('wav')
+            .audioFrequency(16000)
+            .audioChannels(1)   
+            .on('error', (err) => {
+                console.error('❌ FFmpeg error:', err);
+                reject(new Error(`FFmpeg: ${err.message || err}`));
+            })   
+            .pipe()
+            .on('data', chunk => chunks.push(chunk))
+            .on('end', () => {
+                try {
+                    const buffer = Buffer.concat(chunks);
+                    const reader = new wav.Reader();
+                    const pcmChunks = [];
+                    reader.on('data', chunk => pcmChunks.push(chunk));
+                    reader.on('end', () => {
+                        const pcmBuffer = Buffer.concat(pcmChunks);
+                        const int16Array = new Int16Array(pcmBuffer.buffer, pcmBuffer.byteOffset, pcmBuffer.length / 2);
+                        const floatArray = new Float32Array(int16Array.length);
+                        for (let i = 0; i < int16Array.length; i++) {
+                            floatArray[i] = int16Array[i] / 32768.0;
+                        }
+                        resolve(essentia.arrayToVector(floatArray));
+                    });
+                    reader.write(buffer);
+                    reader.end();
+                } catch (err) {
+                    reject(err);
+                }
+            });
+    });
+}
 // tagging song
-async function tagSong(filePath) {
-    // decode to vector
-    const decodeAudio = async (filepath) => { 
-        const buffer = fs.readFileSync(filepath);
-        const audio = await decode(buffer);
-        const audioVector = essentia.arrayToVector(audio._channelData[0]);
+async function tagSong(filePath, topN = 5) {
+    const tagList = [
+        "rock", "pop", "electronic", "hip-hop", "jazz", "classical", "country",
+        "blues", "metal", "punk", "reggae", "soul", "funk", "disco", "house",
+        "techno", "ambient", "folk", "world", "latin", "salsa", "rnb",
+        "rap", "dance", "indie", "alternative", "grunge", "garage", "dubstep",
+        "trap", "drone", "noise", "experimental", "acoustic", "piano",
+        "guitar", "bass", "drums", "vocals", "synthesizer"
+    ];
 
-        return audioVector;
-    };
-
-    // make predictions
-    const extractTags = async (audioData) => {
-        const resampled = essentia.Resample(audioData, 16000);
-        const features = essentia.TensorflowInputMusiCNN(resampled);
-    
-        const predictions = essentia.TensorflowPredictMusiCNN(features); 
+    try {
+        const audioData = await decodeAudio(filePath);
+        const features = essentia.TensorflowInputMusiCNN(audioData);
+        const predictions = essentia.TensorflowPredictMusiCNN(features);
         const avgPredictions = essentia.PoolAggregator(predictions);
 
-        return avgPredictions;
-    };
-
-    const displayTopTags = (predictions, topN = 5) => { 
-        const tags = [ // list of available tags
-            "rock", "pop", "electronic", "hip-hop", "jazz", "classical", "country",
-            "blues", "metal", "punk", "reggae", "soul", "funk", "disco", "house",
-            "techno", "ambient", "folk", "world", "latin", "salsa", "rnb",
-            "rap", "dance", "indie", "alternative", "grunge", "garage", "dubstep",
-            "trap", "drone", "noise", "experimental", "acoustic", "piano",
-            "guitar", "bass", "drums", "vocals", "synthesizer"
-        ];
-
-        const results = predictions.value.map((prob, idx) => ({
+        const results = avgPredictions.value.map((prob, idx) => ({
             tag: tagList[idx] || `tag_${idx}`,
             probability: prob
         }));
         results.sort((a, b) => b.probability - a.probability);
-        return results.slice(0, n);
-    };
-
-    try {
-        const audioData = await decodeAudio(filePath);
-        const predictions = await extractTags(audioData);
-        const topTags = getTopTags(predictions, topN);
+        const topTags = results.slice(0, topN);
 
         const result = {
             filePath,
             tags: topTags
         };
 
-        // save result to json
         const dir = path.dirname(filePath);
         const basename = path.basename(filePath, path.extname(filePath));
         const tagsFilePath = path.join(dir, `${basename}.tags.json`);
-        await fs.writeFile(tagsFilePath, JSON.stringify(result, null, 2), 'utf8');
+        await fs.promises.writeFile(tagsFilePath, JSON.stringify(result, null, 2), 'utf8');
 
-        console.log(`Tags for ${path.basename(filePath)} was saved`);
+        console.log(`Tags for ${path.basename(filePath)} was saved.`);
         return result;
-    } catch (error) {
-        console.error(`Error with ${filePath}:`, error.message);
-        return { filePath, error: error.message };
+    }  catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error(`Error processing ${filePath}:`, errorMsg);
+        return { filePath, error: errorMsg };
     }
-} 
+}
 
 // getting songs 
 async function loadMusicFiles() {
     try {
+        const audioExtensions = ['.mp3', '.wav', '.flac', '.m4a', '.ogg', '.aac'];
         const files = await fs.promises.readdir(musicFolder);
+        const audioFiles = files.filter(file => 
+            audioExtensions.includes(path.extname(file).toLowerCase())
+        );
 
         musicArray = [];
-        for (const file of files) {
+        for (const file of audioFiles) {
             const filePath = path.join(musicFolder, file);
             const tagsResult = await tagSong(filePath);
             musicArray.push({
