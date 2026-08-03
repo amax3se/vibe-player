@@ -27,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let speed = 1;
     const deleteBtn = document.querySelector('#delete-btn');
 
-    // button to find song that suit your mood
-    const findSongBtn = document.querySelector('#findSong-btn');
-
     // button for adding songs
     const fileInput = document.getElementById('file');
     const addSongBtn = document.querySelector('#addSong-btn');
@@ -209,11 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (songNumber >= playlist.length) songNumber = 0;
             playSong(songNumber);
         }
-    });
-
-    // find song
-    findSongBtn.addEventListener('click', () => {
-        alert('Button is not available now!')
     });
 
     // save new song
