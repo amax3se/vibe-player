@@ -1,5 +1,5 @@
 # Vibe player
-The music player with the function of matching music to your mood.
+The music player.
 
 ## Features ⚙️
 - Listen to your music 🎧
