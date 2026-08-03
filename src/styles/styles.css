@@ -225,6 +225,24 @@ body {
     color: #999;
 }
 
+/* the button that finds song that suits your mood */
+.findSong {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 20px 20px;
+}
+
+/* actually, the button */
+#findSong-btn {
+    background-color: #ddd;
+    width: 380px;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
 /* the button that add songs */
 .addSong {
     position: fixed;
@@ -233,7 +251,6 @@ body {
     padding: 20px 20px;
 }
 
-/* actually, the button */
 #addSong-btn {
     background-color: #ddd;
     width: 380px;
