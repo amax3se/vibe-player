@@ -1,82 +1,76 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     background-color: #f7f7ff;
 }
 
-/* switching music buttons */
 .player {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     height: 300px;
+    gap: 20px;
 }
 
-/* the button that switches the song back */ 
-#previous-btn {
-    display: inline-block;
-    font-size: 180%;
-    width: 12vh;
-    height: 12vh;
-    line-height: 1.7em; 
-    vertical-align: middle;
-    text-align: center;
-    letter-spacing: -.1em; 
-    font-size: 5vh;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
+#previous-btn,
+#play-btn,
+#next-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     color: #999;
     border-radius: 100%;
-    background: #cbcbcb;
-    box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.5),
-    inset 0 -1px 1px rgba(0,0,0,.5),
-    0 1px 3px rgba(0,0,0,.5);
+    cursor: pointer;
+    border: none;
+    transition: box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-/* the button that plays or pauses the song */
+#previous-btn,
+#next-btn {
+    width: 12vh;
+    height: 12vh;
+    background: #cbcbcb;
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.5),
+        inset 0 -1px 1px rgba(0,0,0,.5),
+        0 1px 3px rgba(0,0,0,.5);
+}
+
 #play-btn {
-    display: inline-block;
-    font-size: 180%;
     width: 20vh;
     height: 20vh;
-    line-height: 1.7em;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 9vh;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
-    color: #999;
-    border-radius: 100%;
     background: #ddd;
     box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.5),
-    inset 0 -1px 1px rgba(0,0,0,.5),
-    0 1px 3px rgba(0,0,0,.5);
+        inset 0 1px 1px rgba(255,255,255,.5),
+        inset 0 -1px 1px rgba(0,0,0,.5),
+        0 1px 3px rgba(0,0,0,.5);
 }
 
-/* the button that switches the song forward */ 
-#next-btn {
-    display: inline-block;
-    font-size: 180%;
-    width: 12vh;
-    height: 12vh;
-    line-height: 1.7em; 
-    vertical-align: middle;
-    text-align: center;
-    letter-spacing: -.1em;
-    font-size: 5vh;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
-    color: #999;
-    border-radius: 100%;
-    background: #cbcbcb;
+#previous-btn svg,
+#play-btn svg,
+#next-btn svg {
+    display: block;
+    width: 60%;
+    height: 60%;
+    flex-shrink: 0;
+}
+
+#previous-btn:active,
+#next-btn:active {
+    background: #b8b8b8;
     box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.5),
-    inset 0 -1px 1px rgba(0,0,0,.5),
-    0 1px 3px rgba(0,0,0,.5);
+        inset 0 2px 4px rgba(0,0,0,.3),
+        0 0 0 rgba(0,0,0,0);
+}
+
+#play-btn:active {
+    background: #c8c8c8;
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,.3),
+        0 0 0 rgba(0,0,0,0);
 }
 
 /* song list */ 
@@ -174,76 +168,80 @@ body {
     display: block;
 }
 
-/* button's that will change music (speed, removing) */
+
 .changeButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 9vh;
-}
-
-/* the button that repeats song */
-#repeat-btn {
-    background-color: #ddd;
-    width: 50px;
-    height: 40px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
-}
-
-/* the button that speeds up song */
-#spedUp-btn {
-    background-color: #ddd;
-    width: 50px;
-    height: 40px;
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    color: #999;
-}
-
-/* the button that slows down song */
-#slowDown-btn {
-    background-color: #ddd;
-    width: 50px;
-    height: 40px;
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    color: #999;
-}
-
-/* the button that deletes song */
-#delete-btn {
-    background-color: #ddd;
-    width: 50px;
-    height: 40px;
-    font-size: 20px;
-    margin-left: 10px;
-    cursor: pointer;
-    color: #999;
-}
-
-/* the button that add songs */
-.addSong {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
     position: fixed;
-    bottom: 0;
-    right: 0;
-    padding: 20px 20px;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 100;
+}
+
+.changeButton button {
+    pointer-events: auto;
+}
+
+#repeat-btn,
+#spedUp-btn,
+#slowDown-btn,
+#delete-btn,
+#addSong-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 40px;
+    padding: 0;
+    background-color: #ddd;
+    color: #999;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#repeat-btn:hover,
+#spedUp-btn:hover,
+#slowDown-btn:hover,
+#delete-btn:hover,
+#addSong-btn:hover {
+    background-color: #ccc;
+    color: #666;
+}
+
+#repeat-btn:active,
+#spedUp-btn:active,
+#slowDown-btn:active,
+#delete-btn:active,
+#addSong-btn:active {
+    background-color: #bbb;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.2);
+}
+
+#repeat-btn svg,
+#spedUp-btn svg,
+#slowDown-btn svg,
+#delete-btn svg,
+#addSong-btn svg {
+    display: block;
+    width: 20px;
+    height: 20px;
 }
 
 #addSong-btn {
-    background-color: #ddd;
-    width: 380px;
-    height: 45px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
+    margin-top: 10px;
 }
 
-/* default button */
 button {
+    box-sizing: border-box;
+    -webkit-app-region: no-drag;
+    user-select: none;
     background-color: #4285f4;
     color: white;
     border: none;
@@ -251,7 +249,15 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px;
+}
+
+button svg {
+    display: block;
+    pointer-events: none;
+}
+
+button:focus {
+    outline: none;
 }
 
 #response {

@@ -1,4 +1,13 @@
 // user interface events handling
+const PLAY_ICON = `<svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+</svg>`;
+
+const PAUSE_ICON = `<svg viewBox="0 0 24 24" fill="currentColor">
+    <rect x="6" y="5" width="4" height="14" rx="1" />
+    <rect x="14" y="5" width="4" height="14" rx="1" />
+</svg>`;
+
 document.addEventListener('DOMContentLoaded', () => {
 // === DECLARING ===
     // main variables that will be used during all work
@@ -68,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audio.play();
         textSpan.textContent = playlist[songIndex].name;
         updateScrollBehavior();
-        playBtn.textContent = '⏸';
+        playBtn.innerHTML = PAUSE_ICON;
     }
 
     // checks if it is the song end and if true plays new song
@@ -89,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nextBtn.disabled = true;
             nowPlayingBtn.style.pointerEvents = 'none';
             textSpan.textContent = 'Now playing...'; 
-            playBtn.textContent = '►';
+            playBtn.innerHTML = PLAY_ICON;
             audio = null;
             songNumber = 0;
             nowPlayingBtn.classList.remove('scrollable');
@@ -143,10 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.play();
             textSpan.textContent = playlist[songNumber].name;
             updateScrollBehavior();
-            playBtn.textContent = '⏸';
+            playBtn.innerHTML = PAUSE_ICON;
         } else {
             audio.pause();
-            playBtn.textContent = '►';
+            playBtn.innerHTML = PLAY_ICON;
         }
     });
 
