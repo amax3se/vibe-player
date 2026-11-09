@@ -5,6 +5,7 @@ body {
     background-color: #f7f7ff;
 }
 
+/* switching music buttons */
 .player {
     display: flex;
     justify-content: center;
@@ -13,7 +14,7 @@ body {
     height: 300px;
     gap: 20px;
 }
-
+/* main buttons */
 #previous-btn,
 #play-btn,
 #next-btn {
