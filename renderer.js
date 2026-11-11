@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textSpan = nowPlayingBtn.querySelector('.scrolling-text');
 
     // buttons to control song (speed, removal, repeating)
+    const distorBtn = document.querySelector('#distor-btn');
     const repeatBtn = document.querySelector('#repeat-btn');
     const spedUpBtn = document.querySelector('#spedUp-btn');
     const slowDownBtn = document.querySelector('#slowDown-btn');
@@ -171,6 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistWrapper.classList.toggle('show'); 
     });
 
+    // distortion song
+    distorBtn.addEventListener('click', () => {
+        pass;
+    });
     // repeat song
     repeatBtn.addEventListener('click', () => {
         playSong(songNumber);
