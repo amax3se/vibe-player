@@ -128,6 +128,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // distore song
+    function makeDistortionCurve() {
+        const k = 400;
+        const n_samples = 44100;
+        const curve = new Float32Array(n_samples);
+        const deg = Math.PI / 180;
+        
+        for (let i = 0; i < n_samples; ++i) {
+            const x = (i * 2) / n_samples - 1;
+            curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+        }
+        return curve;
+    }
+
     // delete song 
     async function deleteTrack(filePath) {
         try {
@@ -174,12 +188,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // distortion song
     distorBtn.addEventListener('click', () => {
-        pass;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        const distortion = audioCtx.createWaveShaper();
+        distortion.curve = makeDistortionCurve(); 
+        distortion.oversample = '4x'; 
+
+        const audioElement = audio;
+        const track = audioCtx.createMediaElementSource(audioElement);
+
+        track.connect(distortion);
+        distortion.connect(audioCtx.destination);
     });
+    
     // repeat song
     repeatBtn.addEventListener('click', () => {
         playSong(songNumber);
     });
+
     // sped up and slow down song
     spedUpBtn.addEventListener('click', () => {
         if (!audio) return alert('Firstly choose music!');
@@ -199,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             speed -= 0.2; 
         }
     });
+    
     // delete song button
     deleteBtn.addEventListener('click', async () => {
         if (!playlist.length) {
