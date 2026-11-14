@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // distortion song
     distorBtn.addEventListener('click', () => {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioCtx = new window.AudioContext();
 
         const distortion = audioCtx.createWaveShaper();
         distortion.curve = makeDistortionCurve(); 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             speed -= 0.2; 
         }
     });
-    
+
     // delete song button
     deleteBtn.addEventListener('click', async () => {
         if (!playlist.length) {
